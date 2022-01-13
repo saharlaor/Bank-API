@@ -1,7 +1,8 @@
 // Functions
-function validateUserNonexistent(users, user) {
+function validateUserExists(users, user) {
+  console.log(`user`, user);
   const userIndex = users.findIndex(({ id }) => id === user.id);
-  return userIndex === -1;
+  return userIndex !== -1;
 }
 
-module.exports = { validateUserNonexistent };
+module.exports = { validateUserExists };

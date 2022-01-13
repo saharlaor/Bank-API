@@ -1,5 +1,5 @@
 const utils = require("./utils");
-const { validateUserNonexistent } = require("./helpers");
+const { validateUserExists } = require("./helpers");
 
 // Functions
 const getAllUsers = (req, res) => {
@@ -22,7 +22,7 @@ const createUser = (req, res) => {
     cash: 0,
     credit: 0,
   };
-  if (validateUserNonexistent(users, newUser)) {
+  if (!validateUserExists(users, newUser)) {
     users.push(newUser);
     res.status(200).send(newUser);
   } else {
@@ -30,11 +30,23 @@ const createUser = (req, res) => {
   }
 
   utils.writeUsers(users);
-  // res.send("createUser is not Implemented");
 };
 
 const makeDeposit = (req, res) => {
-  res.send("makeDeposit is not Implemented");
+  const users = utils.parseUsers();
+  const user = users.find((item) => item.id === parseInt(req.params.id));
+  if (user) {
+    if (req.body.amount) {
+      user.cash += req.body.amount;
+      res.status(200).send(user);
+    } else {
+      res.status(400).send("Missing amount");
+    }
+  } else {
+    res.status(404).send(`User ${req.params.id} not found`);
+  }
+
+  utils.writeUsers(users);
 };
 
 const updateUserCredit = (req, res) => {
