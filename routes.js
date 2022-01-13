@@ -36,11 +36,11 @@ const makeDeposit = (req, res) => {
   const users = utils.parseUsers();
   const user = users.find((item) => item.id === parseInt(req.params.id));
   if (user) {
-    if (req.body.amount) {
+    if (req.body.amount && req.body.amount > 0) {
       user.cash += req.body.amount;
       res.status(200).send(user);
     } else {
-      res.status(400).send("Missing amount");
+      res.status(400).send("Invalid amount");
     }
   } else {
     res.status(404).send(`User ${req.params.id} not found`);
@@ -50,7 +50,20 @@ const makeDeposit = (req, res) => {
 };
 
 const updateUserCredit = (req, res) => {
-  res.send("updateUserCredit is not Implemented");
+  const users = utils.parseUsers();
+  const user = users.find((item) => item.id === parseInt(req.params.id));
+  if (user) {
+    if (req.body.amount >= 0 && req.body.amount) {
+      user.credit = req.body.amount;
+      res.status(200).send(user);
+    } else {
+      res.status(400).send("Invalid amount");
+    }
+  } else {
+    res.status(404).send(`User ${req.params.id} not found`);
+  }
+
+  utils.writeUsers(users);
 };
 
 const makeWithdraw = (req, res) => {
