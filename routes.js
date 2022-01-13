@@ -6,7 +6,12 @@ const getAllUsers = (req, res) => {
 };
 
 const getUser = (req, res) => {
-  res.send("getUser is not Implemented");
+  const user = utils
+    .parseUsers()
+    .find((item) => item.id === parseInt(req.params.id));
+  user
+    ? res.send(user)
+    : res.status(404).send(`User ${req.params.id} not found`);
 };
 
 const createUser = (req, res) => {
