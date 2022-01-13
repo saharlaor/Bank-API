@@ -1,9 +1,8 @@
-const { builtinModules } = require("module");
-// const utils = require("./utils");
+const utils = require("./utils");
 
 // Functions
 const getAllUsers = (req, res) => {
-  res.send("getAllUsers is not Implemented");
+  res.send(utils.parseUsers());
 };
 
 const getUser = (req, res) => {

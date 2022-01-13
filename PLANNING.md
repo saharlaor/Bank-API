@@ -191,12 +191,6 @@ Success -
     }...
   ]`
 
-Error -
-
-- Missing User -
-  - code - 404
-  - body - `"User ${missingID} not found"`
-
 ## Packages used
 - express
 - fs
