@@ -1,4 +1,5 @@
 const utils = require("./utils");
+const { validateUserNonexistent } = require("./helpers");
 
 // Functions
 const getAllUsers = (req, res) => {
@@ -15,7 +16,21 @@ const getUser = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  res.send("createUser is not Implemented");
+  const users = utils.parseUsers();
+  const newUser = {
+    id: req.body.id,
+    cash: 0,
+    credit: 0,
+  };
+  if (validateUserNonexistent(users, newUser)) {
+    users.push(newUser);
+    res.status(200).send(newUser);
+  } else {
+    res.status(400).send("400 - User already exists");
+  }
+
+  utils.writeUsers(users);
+  // res.send("createUser is not Implemented");
 };
 
 const makeDeposit = (req, res) => {
