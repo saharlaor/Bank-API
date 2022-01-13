@@ -67,7 +67,20 @@ const updateUserCredit = (req, res) => {
 };
 
 const makeWithdraw = (req, res) => {
-  res.send("makeWithdraw is not Implemented");
+  const users = utils.parseUsers();
+  const user = users.find((item) => item.id === parseInt(req.params.id));
+  if (!user) {
+    res.status(404).send(`User ${req.params.id} not found`);
+  } else if (req.body.amount < 0 || !req.body.amount) {
+    res.status(400).send("Invalid amount");
+  } else if (user.credit + user.cash - req.body.amount < 0) {
+    res.status(400).send("Not enough credit");
+  } else {
+    user.cash -= req.body.amount;
+    res.status(200).send(user);
+  }
+
+  utils.writeUsers(users);
 };
 
 const makeTransfer = (req, res) => {
