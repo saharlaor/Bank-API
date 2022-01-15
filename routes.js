@@ -35,15 +35,13 @@ const createUser = (req, res) => {
 const makeDeposit = (req, res) => {
   const users = utils.parseUsers();
   const user = users.find((item) => item.id === parseInt(req.params.id));
-  if (user) {
-    if (req.body.amount && req.body.amount > 0) {
-      user.cash += req.body.amount;
-      res.status(200).send(user);
-    } else {
-      res.status(400).send("Invalid amount");
-    }
-  } else {
+  if (!user) {
     res.status(404).send(`User ${req.params.id} not found`);
+  } else if (req.body.amount < 0 || !req.body.amount) {
+    res.status(400).send("Invalid amount");
+  } else {
+    user.cash += req.body.amount;
+    res.status(200).send(user);
   }
 
   utils.writeUsers(users);
